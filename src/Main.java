@@ -1,7 +1,9 @@
 import components.TextEditor;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
-        new TextEditor();
+        SwingUtilities.invokeLater(TextEditor::new);
     }
 }

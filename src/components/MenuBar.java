@@ -11,7 +11,6 @@ public class MenuBar {
     }
 
     private void setupMenuBar() {
-        // Create a menu
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
 
@@ -33,10 +32,10 @@ public class MenuBar {
         fileMenu.add(saveItem);
         //EDIT MENU ITEMS
         editMenu.add(cutItem);
+
         editMenu.add(copyItem);
         editMenu.add(pasteItem);
         editMenu.add(undoItem);
-        // Add menu to menu bar
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
     }

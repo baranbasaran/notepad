@@ -11,7 +11,7 @@ public class ResizingComponentAdapter extends ComponentAdapter {
 
 
 
-    public ResizingComponentAdapter(JFrame frame, JTextArea textArea,JToolBar toolBar) {
+    public ResizingComponentAdapter(JFrame frame, JTextArea textArea) {
         this.frame = frame;
         this.textArea = textArea;
     }
@@ -19,7 +19,7 @@ public class ResizingComponentAdapter extends ComponentAdapter {
     @Override
     public void componentResized(ComponentEvent componentEvent) {
         Dimension size = frame.getSize();
-        textArea.setBounds(10, 10, size.width - 20, size.height - 20);
+        textArea.setBounds(50 , 0, size.width - 20, size.height - 20);
 
     }
 }

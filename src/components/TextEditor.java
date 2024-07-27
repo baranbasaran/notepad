@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class TextEditor {
@@ -14,7 +17,8 @@ public class TextEditor {
     private String currentText;
     private String previousText;
     private JToolBar toolBar;
-    private MenuBar menuBar; // New instance variable
+    private MenuBar menuBar;
+    private JScrollPane scrollPane;
 
     public TextEditor() {
         frame = new JFrame();
@@ -22,24 +26,32 @@ public class TextEditor {
         toolBar = new JToolBar();
         menuBar = new MenuBar(); // Initialize the MenuBar
         undoManager = new UndoManager(textArea);
-        resizingComponentAdapter = new ResizingComponentAdapter(frame, textArea, toolBar);
+        resizingComponentAdapter = new ResizingComponentAdapter(frame, textArea);
         currentText = textArea.getText();
         previousText = currentText;
+
         setupGUI();
         setupEvents();
         setupMenuEvents();
     }
 
     private void setupGUI() {
+        textArea.setFont(new Font("Arial", Font.BOLD, 14));
+        textArea.setBackground(new Color(43, 43, 43));
+        textArea.setForeground(new Color(169, 183, 198));
+
+
+        scrollPane = new JScrollPane(textArea);
+        LineNumberHeaderView lineNumberHeaderView = new LineNumberHeaderView(textArea);
+        scrollPane.setRowHeaderView(lineNumberHeaderView);
+
         frame.setSize(1200, 750);
-        frame.add(textArea);
-        frame.add(toolBar, BorderLayout.NORTH);
-        frame.addComponentListener(resizingComponentAdapter);
         frame.setLayout(new BorderLayout());
-        frame.setJMenuBar(menuBar.getMenuBar()); // Use the MenuBar class to get the JMenuBar
+        frame.add(toolBar, BorderLayout.NORTH);
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.setJMenuBar(menuBar.getMenuBar());
         frame.setVisible(true);
     }
-
 
     private void setupEvents() {
         textArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -72,12 +84,39 @@ public class TextEditor {
     private void setupMenuEvents() {
 
         menuBar.getMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
-            // Open
-            System.out.println("Open");
+            JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    textArea.setText("");
+                    File file = new File(selectedFile.getAbsolutePath());
+                    java.util.Scanner scanner = new java.util.Scanner(file);
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine();
+                        textArea.append(line + "\n");
+                    }
+                    scanner.close();
+                    undoManager.getUndoStack().clear();
+                    undoManager.getRedoStack().clear();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
         });
         menuBar.getMenuBar().getMenu(0).getItem(1).addActionListener(e -> {
-            // Save
-            System.out.println("Save");
+            JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showSaveDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                try {
+                    FileWriter writer = new FileWriter(fileToSave);
+                    writer.write(textArea.getText());
+                    writer.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
         });
 
         menuBar.getMenuBar().getMenu(1).getItem(0).addActionListener(e -> {

@@ -23,7 +23,7 @@ public class UndoManager {
             String text = undoStack.pop();
             redoStack.push(textArea.getText());
             textArea.setText(text);
-            textArea.repaint();  // Add this line
+            textArea.repaint();
 
             isUndoingOrRedoing = false;
             System.out.println("Undo performed. Undo stack: " + undoStack);
@@ -37,7 +37,7 @@ public class UndoManager {
             String text = redoStack.pop();
             undoStack.push(textArea.getText());
             textArea.setText(text);
-            textArea.repaint();  // Add this line
+            textArea.repaint();
 
             isUndoingOrRedoing = false;
             System.out.println("Redo performed. Undo stack: " + undoStack);
