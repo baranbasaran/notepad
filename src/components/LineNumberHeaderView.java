@@ -1,6 +1,5 @@
 package components;
 
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -8,6 +7,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Utilities;
 import java.awt.*;
+
 class LineNumberHeaderView extends JComponent implements DocumentListener {
     private static final long serialVersionUID = 1L;
     private final JTextArea textArea;
@@ -22,9 +22,9 @@ class LineNumberHeaderView extends JComponent implements DocumentListener {
         fontAscent = fontMetrics.getAscent();
 
         textArea.getDocument().addDocumentListener(this);
-        setPreferredSize(new Dimension(50, textArea.getHeight()));
+        setPreferredSize(new Dimension(25, textArea.getHeight()));
         setBackground(new Color(60, 63, 65));
-        setForeground(new Color(128, 128, 128)); 
+        setForeground(new Color(128, 128, 128));
     }
 
     @Override
@@ -39,8 +39,9 @@ class LineNumberHeaderView extends JComponent implements DocumentListener {
         Rectangle clip = g.getClipBounds();
         int startOffset = textArea.viewToModel2D(new Point(0, clip.y));
         int endOffset = textArea.viewToModel2D(new Point(0, clip.y + clip.height));
+        int documentLength = textArea.getDocument().getLength();
 
-        while (startOffset <= endOffset) {
+        while (startOffset <= endOffset && startOffset <= documentLength) {
             try {
                 Rectangle rect = textArea.modelToView2D(startOffset).getBounds();
                 int lineNumber = getLineNumber(startOffset);

@@ -1,54 +1,49 @@
 package components;
+
 import java.util.Stack;
 import javax.swing.*;
 
 public class UndoManager {
-    private Stack<String> undoStack;
-    private Stack<String> redoStack;
-    private JTextArea textArea;
+    private final Stack<String> undoStack;
+    private final Stack<String> redoStack;
+    private final JTextArea textArea;
     private boolean isUndoingOrRedoing;
+
     public UndoManager(JTextArea textArea) {
         this.textArea = textArea;
-        undoStack = new Stack<>() ;
+        undoStack = new Stack<>();
         redoStack = new Stack<>();
         isUndoingOrRedoing = false;
 
         undoStack.push("");
-
     }
 
-    public void undo() {
+    public synchronized void undo() {
         if (!undoStack.isEmpty()) {
             isUndoingOrRedoing = true;
-            String text = undoStack.pop();
             redoStack.push(textArea.getText());
-            textArea.setText(text);
+            textArea.setText(undoStack.pop());
             textArea.repaint();
-
             isUndoingOrRedoing = false;
-            System.out.println("Undo performed. Undo stack: " + undoStack);
-            System.out.println("Redo stack: " + redoStack);
+            printStacks("Undo performed.");
         }
     }
 
-    public void redo() {
+    public synchronized void redo() {
         if (!redoStack.isEmpty()) {
             isUndoingOrRedoing = true;
-            String text = redoStack.pop();
             undoStack.push(textArea.getText());
-            textArea.setText(text);
+            textArea.setText(redoStack.pop());
             textArea.repaint();
-
             isUndoingOrRedoing = false;
-            System.out.println("Redo performed. Undo stack: " + undoStack);
-            System.out.println("Redo stack: " + redoStack);
+            printStacks("Redo performed.");
         }
     }
 
-    public void addUndo(String text){
+    public synchronized void addUndo(String text) {
         if (!isUndoingOrRedoing) {
             undoStack.push(text);
-            System.out.println("Undo added. Undo stack: " + undoStack);
+            printStacks("Undo added.");
         }
     }
 
@@ -58,5 +53,10 @@ public class UndoManager {
 
     public Stack<String> getRedoStack() {
         return redoStack;
+    }
+
+    private void printStacks(String action) {
+        System.out.println(action + " Undo stack: " + undoStack);
+        System.out.println("Redo stack: " + redoStack);
     }
 }

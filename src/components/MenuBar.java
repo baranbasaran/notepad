@@ -11,37 +11,22 @@ public class MenuBar {
     }
 
     private void setupMenuBar() {
-        JMenu fileMenu = new JMenu("File");
-        JMenu editMenu = new JMenu("Edit");
+        JMenu fileMenu = createMenu("File", new String[]{"Open", "Save"});
+        JMenu editMenu = createMenu("Edit", new String[]{"Cut", "Copy", "Paste", "Undo"});
 
-
-
-        // FILE MENU ITEMS
-        JMenuItem openItem = new JMenuItem("Open");
-        JMenuItem saveItem = new JMenuItem("Save");
-        //EDIT MENU ITEMS
-        JMenuItem cutItem = new JMenuItem("Cut");
-        JMenuItem copyItem = new JMenuItem("Copy");
-        JMenuItem pasteItem = new JMenuItem("Paste");
-        JMenuItem undoItem = new JMenuItem("Undo");
-
-
-
-        // File menu items
-        fileMenu.add(openItem);
-        fileMenu.add(saveItem);
-        //EDIT MENU ITEMS
-        editMenu.add(cutItem);
-
-        editMenu.add(copyItem);
-        editMenu.add(pasteItem);
-        editMenu.add(undoItem);
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
+    }
+
+    private JMenu createMenu(String title, String[] items) {
+        JMenu menu = new JMenu(title);
+        for (String item : items) {
+            menu.add(new JMenuItem(item));
+        }
+        return menu;
     }
 
     public JMenuBar getMenuBar() {
         return menuBar;
     }
-
 }
