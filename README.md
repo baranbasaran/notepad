@@ -1,6 +1,6 @@
 # MyTextEditor
 
-MyTextEditor is a simple text editor built with Java Swing. It provides a clean and modern user interface with essential text editing functionalities like undo/redo, cut/copy/paste, line numbering, and status bar updates.
+MyTextEditor is a simple text editor built with Java Swing. It provides a user interface with essential text editing functionalities like undo/redo, cut/copy/paste, line numbering, and status bar updates.
 
 ## Features
 
